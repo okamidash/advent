@@ -82,15 +82,12 @@ class Validator:
 validator = Validator()
 
 for line in open("input.txt"):
-
-    print(line)
-    if line is "\n":
+    if line == "\n":
         passports.append(data)
         data = {}
     else:
         line_buffer = line.rstrip().split(" ")
         for piece in line_buffer:
-            print(piece)
             data_buffer = piece.split(":")
             key = data_buffer[0]
             if key in required_fields:
@@ -101,9 +98,7 @@ for line in open("input.txt"):
 
 valid = 0
 for passport in passports:
-    print(passport)
     if len(passport.keys()) == len(required_fields):
         valid += 1
-     invalid += 1
 
 print(valid)
