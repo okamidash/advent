@@ -1,4 +1,5 @@
 import re
+#from timeit import timeit
 required_fields = [
     "byr",  # Birth Year
     "iyr",  # Issue Year
@@ -9,9 +10,6 @@ required_fields = [
     "pid",  # Passport ID
     #"cid"  # Country ID
     ]
-passports = []
-
-data = {}
 
 
 class Validator:
@@ -79,26 +77,32 @@ class Validator:
             return True
 
 
-validator = Validator()
+def main():
+    validator = Validator()
+    passports = []
 
-for line in open("input.txt"):
-    if line == "\n":
-        passports.append(data)
-        data = {}
-    else:
-        line_buffer = line.rstrip().split(" ")
-        for piece in line_buffer:
-            data_buffer = piece.split(":")
-            key = data_buffer[0]
-            if key in required_fields:
-                val = data_buffer[1]
-                if getattr(validator, f'validate_{key}')(val):
-                    data[key] = val
+    data = {}
+    for line in open("input.txt"):
+        if line == "\n":
+            passports.append(data)
+            data = {}
+        else:
+            line_buffer = line.rstrip().split(" ")
+            for piece in line_buffer:
+                data_buffer = piece.split(":")
+                key = data_buffer[0]
+                if key in required_fields:
+                    val = data_buffer[1]
+                    if getattr(validator, f'validate_{key}')(val):
+                        data[key] = val
+
+    valid = 0
+    for passport in passports:
+        if len(passport.keys()) == len(required_fields):
+            valid += 1
 
 
-valid = 0
-for passport in passports:
-    if len(passport.keys()) == len(required_fields):
-        valid += 1
-
-print(valid)
+if __name__ == '__main__':
+    #print(timeit(main, number=1))
+    main()
+#print(valid)
