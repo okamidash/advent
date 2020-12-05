@@ -1,3 +1,8 @@
+
+
+import time
+
+
 def search(search_set: str, min: int, max: int) -> int:
     row_range = abs(max - min)
     differential = round(row_range / 2)
@@ -39,9 +44,15 @@ def main():
         if seat_id > highest_seat_id:
             highest_seat_id = seat_id
 
-    print(f"Part 1: {highest_seat_id}")
-    print(f"Part 2: {part_2(sorted(seat_id_list))}")
+    #print(f"Part 1: {highest_seat_id}")
+    #print(f"Part 2: {part_2(sorted(seat_id_list))}")
 
 
+time_total = 0
+test_count = 1000
 if __name__ == '__main__':
-    main()
+    for temp_step in range(test_count):
+        time_before = time.time()
+        main()
+        time_total += time.time() - time_before
+    print(test_count, "trials took", time_total / test_count)
