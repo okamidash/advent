@@ -55,7 +55,7 @@ def part_2():
     return (recurse(finalizers, bag_rules, "shiny gold") - 1)
 
 
-def recurse(finalizers, bag_rules, search_bag):
+def recurse(finalizers, bag_rules, search_bag, prepared_totals={}):
     # If the bag cannot recurse any further, just return
     if search_bag in finalizers:
         # Return None if a finalizer is met
@@ -69,7 +69,11 @@ def recurse(finalizers, bag_rules, search_bag):
             # Set the multiplier
             next_bag_total = bag_rules[search_bag][next_bag]
             # Recurse into the bag rules
-            recurse_answer = recurse(finalizers, bag_rules, next_bag)
+            if next_bag in prepared_totals:
+                recurse_answer = prepared_totals[next_bag]
+            else:
+                recurse_answer = recurse(finalizers, bag_rules, next_bag, prepared_totals)
+                prepared_totals[next_bag] = recurse_answer
             # So that we don't multiply by None
             if recurse_answer is None:
                 total += next_bag_total
@@ -80,5 +84,5 @@ def recurse(finalizers, bag_rules, search_bag):
 
 
 if __name__ == '__main__':
-    part_1()
-    part_2()
+    #part_1()
+    print(part_2())
