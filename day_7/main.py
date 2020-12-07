@@ -83,6 +83,18 @@ def recurse(finalizers, bag_rules, search_bag, prepared_totals={}):
     return total
 
 
+def timecheck():
+    import time
+    time_total = 0
+    test_count = 100
+    for temp_step in range(test_count):
+        time_before = time.time()
+        part_2()
+        time_total += time.time() - time_before
+        print(test_count, "trials took", time_total / test_count)
+#
+
+
 if __name__ == '__main__':
     #part_1()
-    print(part_2())
+    part_2()
