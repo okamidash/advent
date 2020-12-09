@@ -12,8 +12,8 @@ def prepare(filename):
         opp, ins = int(ord(split_ins[0][0])), int(split_ins[1])
         instructions.append((opp, ins))
     instructions_length = len(instructions)
-    looping_stack, accumulator_stack, final_accumulator, position = recurse(instructions, instructions_length)
-    return instructions, instructions_length, looping_stack, accumulator_stack, final_accumulator, position
+
+    return instructions, instructions_length
 
 
 def part_2():
@@ -65,9 +65,10 @@ def recurse(instructions, instructions_length, stack=[], position=0, accumulator
 if __name__ == '__main__':
     time_total = 0
     test_count = 1000
-    instructions, instructions_length, looping_stack, accumulator_stack, final_accumulator, position = prepare('vessInput.txt')
+    instructions, instructions_length = prepare('vessInput.txt')
     for temp_step in range(test_count):
         time_before = time.time()
+        looping_stack, accumulator_stack, final_accumulator, position = recurse(instructions, instructions_length)
         part_2()
         time_total += time.time() - time_before
     print(test_count, "trials took", time_total / test_count)
