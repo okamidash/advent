@@ -61,90 +61,17 @@ def mover(x_pos, y_pos, x_mov, y_mov, x_brk, y_brk):
 
 def get_visible(x_pos, y_pos, x_max, y_max, seats):
     adjacent = []
-
-    # Move up
-    if y_pos != 0:
-        for y in range(y_pos - 1, 0 - 1, -1):
-            seat = seats[y][x_pos]
-            if seat == 35 or seat == 76:
-                adjacent.append(seat)
-                break
-    # Move down
-    if y_pos != y_max:
-        for y in range(y_pos + 1, y_max + 1):
-            seat = seats[y][x_pos]
-            if seat == 35 or seat == 76:
-                adjacent.append(seat)
-                break
-    # Move left
-    if x_pos != 0:
-        for x in range(x_pos - 1, 0 - 1, -1):
-            seat = seats[y_pos][x]
-            if seat == 35 or seat == 76:
-                adjacent.append(seat)
-                break
-    # Move Right
-    if x_pos != x_max:
-        for x in range(x_pos + 1, x_max + 1):
-            seat = seats[y_pos][x]
-            if seat == 35 or seat == 76:
-                adjacent.append(seat)
-                break
-    # Move Right -> Up
-    mover(x_pos, y_pos, 1, -1, x_max, 0)
-    y = y_pos
-    x = x_pos
-    while True:
-        if y == 0 or x == x_max:
-            break
-        else:
-            y -= 1
-            x += 1
-        seat = seats[y][x]
-        if seat == 35 or seat == 76:
-            adjacent.append(seat)
-            break
-    # Move Right -> Down
-    y = y_pos
-    x = x_pos
-    while True:
-        if y == y_max or x == x_max:
-            break
-        else:
-            y += 1
-            x += 1
-        seat = seats[y][x]
-        if seat == 35 or seat == 76:
-            adjacent.append(seat)
-            break
-    # Move Left -> Down
-    y = y_pos
-    x = x_pos
-    while True:
-        if y == y_max or x == 0:
-            break
-        else:
-            y += 1
-            x -= 1
-        seat = seats[y][x]
-        if seat == 35 or seat == 76:
-            adjacent.append(seat)
-            break
-    # Move Left -> Up
-    y = y_pos
-    x = x_pos
-    while True:
-        if y == 0 or x == 0:
-            break
-        else:
-            y -= 1
-            x -= 1
-        seat = seats[y][x]
-        if seat == 35 or seat == 76:
-            adjacent.append(seat)
-            break
-
-    return adjacent
+    series = [
+        (0, -1, None, 0),
+        (0, 1, None, y_max),
+        (1, 0, x_max, None),
+        (1, -1, x_max, 0),
+        (1, 1, x_max, y_max),
+        (-1, 0, 0, None),
+        (-1, 1, 0, y_max),
+        (-1, -1, 0, 0)
+    ]
+    return [mover(x_pos, y_pos, x_mov, y_mov, x_brk, y_brk) for x_mov, y_mov, x_brk, y_brk in series]
 
 
 def part_1(seats):
