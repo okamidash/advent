@@ -34,11 +34,13 @@ def det_rotation(bearing, rotation, one_turn=(1, 2, 3, 0), two_turn=(2, 3, 0, 1)
 def wp_det_rotation(rotation, wp_north_south, wp_east_west):
     if rotation > 0:
         while rotation > 0:
-            rotation = rotation - 90
-            ns = wp_east_west * -1
-            ew = wp_north_south
-            wp_north_south = ns
-            wp_east_west = ew
+            rotation -= 90
+            wp_north_south, wp_east_west = -wp_east_west, wp_north_south
+        return wp_north_south, wp_east_west
+    if rotation < 0:
+        while rotation < 0:
+            rotation += 90
+            wp_north_south, wp_east_west = wp_east_west, -wp_north_south
         return wp_north_south, wp_east_west
 
 
@@ -78,9 +80,9 @@ def part_2(log, log_length, position=(0, 0), waypoint=(1, 10)):
         # COMMAND: Rotate Right
         wp_north_south, wp_east_west = wp_det_rotation(value, wp_north_south, wp_east_west)
     elif command == 70:
-        ship_north_south += value * abs(wp_north_south)
-        ship_east_west += value * abs(wp_east_west)
-    print("Ship | North:", ship_north_south, "East:", ship_east_west, "| Waypoint | North:", wp_north_south, "East:", wp_east_west)
+        ship_north_south += value * wp_north_south
+        ship_east_west += value * wp_east_west
+    #print(f"Ship\t\t | East: {ship_east_west}, North: {ship_north_south}\nWaypoint\t | East: {wp_east_west}, North: {wp_north_south}\n")
     return part_2(log[1:], log_length - 1, (ship_north_south, ship_east_west), (wp_north_south, wp_east_west))
 
 
@@ -114,6 +116,6 @@ def part_1(log, log_length, position=(0, 0, 1)):
 
 
 if __name__ == '__main__':
-    log = grab_log('test_input.txt')
+    log = grab_log('input.txt')
     #print(f"Part 1: {part_1(log, len(log))}")
     print(part_2(log, len(log)))
