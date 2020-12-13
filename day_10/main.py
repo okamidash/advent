@@ -15,15 +15,12 @@ def part_1(adapters, voltage=0, diff_1=0, diff_2=0, diff_3=0):
 
 # Stack is a list of possible permeatations
 def part_2(adapters, final_adapter, voltage=0, stack={}):
-    # Identify the paths to go from here
     for voltage_n in range(voltage + 1, voltage + 4):
         if voltage_n in adapters:
-            print(voltage_n)
 
 
 if __name__ == '__main__':
     adapters = sorted(grab_input('test_input.txt'))
     # part_1(adapters)
     final_adapter = adapters[-1] + 3
-    print("Trying to get to ", final_adapter)
     print(part_2(adapters, final_adapter))
