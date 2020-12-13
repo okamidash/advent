@@ -32,11 +32,13 @@ def det_rotation(bearing, rotation, one_turn=(1, 2, 3, 0), two_turn=(2, 3, 0, 1)
 
 
 def wp_det_rotation(rotation, wp_north_south, wp_east_west):
-    if rotation == 90:
-        return wp_east_west, wp_north_south
-    if rotation == 180:
-        return -wp_north_south, -wp_east_west
-    else:
+    if rotation > 0:
+        while rotation > 0:
+            rotation = rotation - 90
+            ns = wp_east_west * -1
+            ew = wp_north_south
+            wp_north_south = ns
+            wp_east_west = ew
         return wp_north_south, wp_east_west
 
 
@@ -51,7 +53,7 @@ def det_move(north_south, east_west, bearing, value):
         return north_south, east_west - value
 
 
-def part_2(log, log_length, position=(10, 1), waypoint=(1, 10)):
+def part_2(log, log_length, position=(0, 0), waypoint=(1, 10)):
     ship_north_south, ship_east_west = position
     wp_north_south, wp_east_west = waypoint
     if log_length == 0:
@@ -76,11 +78,10 @@ def part_2(log, log_length, position=(10, 1), waypoint=(1, 10)):
         # COMMAND: Rotate Right
         wp_north_south, wp_east_west = wp_det_rotation(value, wp_north_south, wp_east_west)
     elif command == 70:
-        ship_north_south += value * wp_north_south
-        ship_east_west += value * wp_east_west
-    print(ship_north_south, ship_east_west)
-    #north_south, east_west = det_move(north_south, east_west, bearing, value)
-    return part_1(log[1:], log_length - 1, (ship_north_south, ship_east_west), (wp_north_south, wp_east_west))
+        ship_north_south += value * abs(wp_north_south)
+        ship_east_west += value * abs(wp_east_west)
+    print("Ship | North:", ship_north_south, "East:", ship_east_west, "| Waypoint | North:", wp_north_south, "East:", wp_east_west)
+    return part_2(log[1:], log_length - 1, (ship_north_south, ship_east_west), (wp_north_south, wp_east_west))
 
 
 def part_1(log, log_length, position=(0, 0, 1)):
@@ -113,6 +114,6 @@ def part_1(log, log_length, position=(0, 0, 1)):
 
 
 if __name__ == '__main__':
-    log = grab_log('input.txt')
-    print(f"Part 1: {part_1(log, len(log))}")
-    #print(part_2(log, len(log)))
+    log = grab_log('test_input.txt')
+    #print(f"Part 1: {part_1(log, len(log))}")
+    print(part_2(log, len(log)))
