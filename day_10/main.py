@@ -1,4 +1,4 @@
-import sys
+from functools import lru_cache
 
 
 def grab_input(filename):
@@ -17,19 +17,23 @@ def part_1(adapters, voltage=0, diff_1=0, diff_2=0, diff_3=0):
 
 
 # Stack is a list of possible permeatations
-def part_2(adapters, final_adapter, voltage=0, stack={}, total=0):
-    if voltage == final_adapter:
-        return 1
-    for voltage_n in range(1, 4):
-        if voltage_n + voltage in adapters:
-            total += part_2(adapters, final_adapter, voltage_n + voltage)
-    return total
+def part_2(adapters):
+    @lru_cache
+    def recurse(voltage):
+        if voltage == adapters[-1]:
+            return 1
+        else:
+            total = 0
+            for voltage_n in range(1, 4):
+                if voltage_n + voltage in adapters:
+                    total += recurse(voltage_n + voltage)
+            return total
+    return recurse(0)
 
 
 if __name__ == '__main__':
-    sys.setrecursionlimit(1500)
-    adapters = sorted(grab_input('test_input.txt'))
+    adapters = sorted(grab_input('input.txt'))
     # part_1(adapters)
-    final_adapter = adapters[-1] + 3
-    print(final_adapter)
-    print(part_2(adapters, final_adapter))
+    print(adapters)
+    adapters.append(adapters[-1] + 3)
+    print(part_2(adapters))
